@@ -10,7 +10,7 @@ const passport = require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const connect = require('./schemas');
-const passportConfig = require('./passport');
+const passportConfig = require('./passport'); //require('./passport/index.js') 와 같다
 
 const app = express();
 passportConfig();
