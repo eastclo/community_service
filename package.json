@@ -4,7 +4,7 @@
   "description": "웹프로그래밍 설계 및 실습 과제",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,14 @@
   "homepage": "https://github.com/eastclo/community_service#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mongoose": "^5.10.16",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nunjucks": "^3.2.2",
     "passport": "^0.4.1",
     "passport-kakao": "^1.0.0",
     "passport-local": "^1.0.0"
