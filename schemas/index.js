@@ -5,8 +5,8 @@ const connect = () => {
         mongoose.set('debug', true);
     }
     //수정 요망 
-    mongoose.connect('mongodb://이름:비밀번호@localhost:8001/admin', {  //임시
-        dbName: 'nodejs',
+    mongoose.connect('mongodb://root:5323@localhost:27017/admin', {  //임시
+        dbName: 'communityService',
         useNewUrlParser: true,
         useCreateIndex: true,
     }, (error) => {

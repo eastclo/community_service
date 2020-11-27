@@ -9,6 +9,7 @@ const passport = require('passport');
 
 dotenv.config();
 const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
 const connect = require('./schemas');
 const passportConfig = require('./passport'); //require('./passport/index.js') 와 같다
 
@@ -36,10 +37,10 @@ app.use(session({
         secure: false,
     },
 }));
-
-app.use('/', pageRouter);
 app.use(passport.initialize());
-app.use(passport.session();)
+app.use(passport.session());
+app.use('/', pageRouter);
+app.use('/auth', authRouter);
 app.use((req, res, next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
     error.status = 404;
