@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="/main.css">
   </head>
   <body>
+    <div class="about">
+      <a href='/'>Home</a>
+      <a href='/about'>소개 페이지</a>
+    </div>
     <div class="container">
       <div class="profile-wrap">
         <div class="profile">
@@ -38,14 +42,11 @@
             <button id="login" type="submit" class="btn">로그인</button>
           </form>
         {% endif %}
-        </div>
-        <footer>
-          Made by&nbsp;
-          <a href="https://www.zerocho.com" target="_blank">ZeroCho</a>
-        </footer>
       </div>
       {% block content %}
       {% endblock %}
+    <a href='/board'>게시판</a>
+    <a href='/gallery'>사진 갤러리</a>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
