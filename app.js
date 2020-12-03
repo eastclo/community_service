@@ -10,6 +10,9 @@ const passport = require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
+const aboutRouter = require('./routes/about');
+const galleryRouter = require('./routes/gallery');
+const boardRouter = require('./routes/board');
 const connect = require('./schemas');
 const passportConfig = require('./passport'); //require('./passport/index.js') 와 같다
 
@@ -41,6 +44,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
+app.use('/about', aboutRouter);
+app.use('/gallery', galleryRouter);
+app.use('/board', boardRouter);
 app.use((req, res, next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
     error.status = 404;
