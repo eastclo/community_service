@@ -10,7 +10,7 @@ module.exports = () => {
         passwordField: 'password',
         }, async (email, password, done) => {
             try {
-                const exUser = await User.find({email:email}); //mysql에서의 findOne({where: {email}})
+                const exUser = await User.find({'email':email}); //mysql에서의 findOne({where: {email}})
                 if(exUser.length) {
                     const result = await bcrypt.compare(password, exUser[0].password);
                     if(result) {

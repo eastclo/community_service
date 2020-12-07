@@ -1,5 +1,7 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { Post, User } = require('../schemas');
+const { compareSync } = require('bcrypt');
 
 const router = express.Router();
 
@@ -21,10 +23,24 @@ router.get('/join', isNotLoggedIn, (req, res) => { //로그아웃 상태
 
 router.get('/', (req, res, next) => {
   const twits = [];
-  res.render('main', {
-    title: 'NodeBird',
+  res.render('layout', {
+    title: 'Community Service',
     twits,
   });
 });
-
+/*
+router.get('/gallery', async (req, res, next) => {
+  try {
+    const posts = await Post.find().sort({'_id': id});
+    console.log(posts);
+    res.render('gallery', {
+      title: 'Community Service',
+      tiwts: posts,
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+});
+*/
 module.exports = router;

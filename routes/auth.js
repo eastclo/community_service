@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/join', isNotLoggedIn, async (req, res, next) => { //회원가입
     const { email, nick, password } = req.body;
     try {
-        const exUser = await User.find().where('email').equals(email); 
+        const exUser = await User.find({'email':email}); 
         if(exUser.length) { //기존에 가입한 사용자 에러처리
             return res.redirect('/join?error=exist');
         }

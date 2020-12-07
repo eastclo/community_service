@@ -11,6 +11,10 @@
     <div class="about">
       <a href='/'>Home</a>
       <a href='/about'>소개 페이지</a>
+      {% if user and user.id %}
+        <a href='/board'>게시판</a>
+        <a href='/gallery'>사진 갤러리</a>
+      {% endif %}
     </div>
     <div class="container">
       <div class="profile-wrap">
@@ -45,8 +49,6 @@
       </div>
       {% block content %}
       {% endblock %}
-    <a href='/board'>게시판</a>
-    <a href='/gallery'>사진 갤러리</a>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>

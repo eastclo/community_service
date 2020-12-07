@@ -4,7 +4,7 @@
     <div class="timeline">
       {% if user %}
         <div>
-          <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
+          <form id="twit-form" action="/gallery" method="post" enctype="multipart/form-data">
             <div class="input-group">
               <textarea id="twit" name="content" maxlength="140"></textarea>
             </div>
@@ -50,7 +50,7 @@
         const formData = new FormData();
         console.log(this, this.files);
         formData.append('img', this.files[0]);
-        axios.post('/post/img', formData)
+        axios.post('/gallery/img', formData)
           .then((res) => {
             document.getElementById('img-url').value = res.data.url;
             document.getElementById('img-preview').src = res.data.url;
