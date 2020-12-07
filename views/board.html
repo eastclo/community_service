@@ -1,5 +1,46 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    <div class="timeline">
+      {% if user %}
+        <div>
+          <form id="twit-form" action="/board" method="post">
+            <div class="input-group">
+              <textarea id="twit" name="title" maxlength="20" placeholder="제목"></textarea>
+              <textarea id="twit" name="content" maxlength="200" placeholder="내용"></textarea>
+            </div>
+            <button id="twit-btn" type="submit" class="btn">올리기</button>
+          </form>
+        </div>
+      <div class="twits">
+        <form id="hashtag-form" action="/hashtag">
+          <input type="text" name="hashtag" placeholder="태그 검색">
+          <button class="btn">검색</button>
+        </form>
+      {% endif %}
+        {% for twit in twits %}
+          <div class="twit">
+            <input type="hidden" value="{{twit.poster_id}}" class="twit-user-id">
+            <input type="hidden" value="{{twit.id}}" class="twit-id">
+            {% if twit.title %}
+              <h3 class="twit-title">제목: {{twit.title}}</h3>
+            {% endif %} 
+            <div class="twit-author">{{twit.poster_nick}}</div>
+            <div class="twit-date">{{twit.date}}</div>
+            {%if user.id == twit.poster_id %}
+              <form action="/board/modify" method="post">
+                <button type="submit" name="id" value="{{twit.id}}" class="btn">수정</button>
+              </form>
+              <form action="/board/delete" method="post">
+                <button type="submit" name="id" value="{{twit.id}}" class="btn">삭제</button>
+              </form>
+            {% endif %}
+            {% if twit.content %}
+              <div class="twit-content">내용: {{twit.content}}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
 
 {% endblock %}

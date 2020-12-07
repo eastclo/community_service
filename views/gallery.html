@@ -6,7 +6,7 @@
         <div>
           <form id="twit-form" action="/gallery" method="post" enctype="multipart/form-data">
             <div class="input-group">
-              <textarea id="twit" name="content" maxlength="140"></textarea>
+              <textarea id="twit" name="hashtag" maxlength="40" placeholder="해쉬태그"></textarea>
             </div>
             <div class="img-preview">
               <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
@@ -15,7 +15,7 @@
             <div>
               <label id="img-label" for="img">사진 업로드</label>
               <input id="img" type="file" accept="image/*">
-              <button id="twit-btn" type="submit" class="btn">짹짹</button>
+              <button id="twit-btn" type="submit" class="btn">올리기</button>
             </div>
           </form>
         </div>
@@ -27,15 +27,20 @@
       {% endif %}
         {% for twit in twits %}
           <div class="twit">
-            <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
+            <input type="hidden" value="{{twit.poster_id}}" class="twit-user-id">
             <input type="hidden" value="{{twit.id}}" class="twit-id">
-            <div class="twit-author">{{twit.User.nick}}</div>
-            {% if not followerIdList.includes(twit.User.id) and twit.User.id !== user.id %}
-              <button class="twit-follow">팔로우하기</button>
+            <div class="twit-author">{{twit.poster_nick}}</div>
+            <div class="twit-date">{{twit.date}}</div>
+            {%if user.id == twit.poster_id %}
+              <form action="/gallery/modify" method="post">
+                <button type="submit" name="id" value="{{twit.id}}" class="btn">수정</button>
+              </form>
+              <form action="/gallery/delete" method="post">
+                <button type="submit" name="id" value="{{twit.id}}" class="btn">삭제</button>
+              </form>
             {% endif %}
-            <div class="twit-content">{{twit.content}}</div>
             {% if twit.img %}
-              <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
+              <div class="twit-img"><img src="{{twit.img}}"/></div>
             {% endif %}
           </div>
         {% endfor %}

@@ -28,19 +28,5 @@ router.get('/', (req, res, next) => {
     twits,
   });
 });
-/*
-router.get('/gallery', async (req, res, next) => {
-  try {
-    const posts = await Post.find().sort({'_id': id});
-    console.log(posts);
-    res.render('gallery', {
-      title: 'Community Service',
-      tiwts: posts,
-    });
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
-});
-*/
+
 module.exports = router;

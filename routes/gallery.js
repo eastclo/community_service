@@ -3,10 +3,9 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const Post = require('../schemas/post');
-const Hashtag = require('../schemas/hashtag');
+const Gallery = require('../schemas/gallery');
 const User = require('../schemas/user');
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
@@ -20,7 +19,7 @@ try {
 const upload = multer({
     storage: multer.diskStorage({
         destination(req, file, cb) {
-            cb(null, 'uploads/');
+            cb(null, 'uploads/')
         },
         filename(req, file, cb) {
             const ext = path.extname(file.originalname);
@@ -38,27 +37,15 @@ router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
 const upload2 = multer();
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     try {
-        console.log(req.body);
-        const post = await Post.create({
-            content: req.body.content,
+    //    const hashtags = req.body.content.match(/#[^\s#]+/g);
+        const poster = await User.find({"_id": req.user.id});
+        await Gallery.create({
+            poster_id: req.user.id,
+            poster_nick: poster[0].nick,
+            date: Date.now(),
             img: req.body.url,
         });
-        const hashtags = req.body.content.match(/#[^\s#]+/g);
-        if(hashtags) {
-            const result = await Promise.all(
-                hashtags.map(tag => {
-                    const check = Hashtag.find({ title: tag.slice(1).toLowerCase()});
-                    if(check.length === 0) {
-                        return Hashtag.create({
-                            title: tag.slice(1).toLowerCase(),
-                        });
-                    }
-                    return check[0];
-                }),
-            );
-            await post.addHashtags(result.map(r => r[0])); //TODO
-        }
-        res.redirect('/');
+        res.redirect('/gallery');
     } catch (error) {
         console.error(error);
         next(error);
@@ -66,20 +53,8 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
 });
 
 router.get('/', async (req, res, next) => {
-    const twits = [];
-    res.render('gallery', {
-        title: 'Community Service',
-        twits: twits,
-    });
-    /*
     try {
-        const posts = await Post.findAll({
-            include: {
-                model: User,
-                attributes: ['id', 'nick'],
-            },
-            order: [[ 'createdAt', 'DESC']],
-        });
+        const posts = await Gallery.find({}).sort({date: -1});
         res.render('gallery', {
             title: 'Community Service',
             twits: posts,
@@ -88,7 +63,54 @@ router.get('/', async (req, res, next) => {
         console.error(err);
         next(err);
     }
-    */
+});
+
+router.post('/delete', async (req, res, next) => {
+    try{
+        await Gallery.deleteOne({"_id":req.body.id});
+        res.redirect('/gallery');
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
+router.get('/modify', (req, res, next) => {
+    try{
+        res.redirect('/gallery_modify');
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
+const upload3 = multer();
+router.post('/update', isLoggedIn, upload3.none(), async (req, res, next) => {
+    try {
+    //    const hashtags = req.body.content.match(/#[^\s#]+/g);
+        await Gallery.updateOne({"_id": req.body.id},{$set:{
+            date: Date.now(),
+            img: req.body.url,
+       //     hashtag: req.body.hashtag,
+        }});
+        res.redirect('/gallery');
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+router.post('/modify', async (req, res, next) => {
+    try{
+        const post = await Gallery.find({"_id":req.body.id});
+        console.log(post[0]);
+        res.render('gallery_modify', {
+            twit: post[0]
+        });
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
 });
 
 module.exports = router;
