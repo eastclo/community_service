@@ -1,7 +1,5 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { Post, User } = require('../schemas');
-const { compareSync } = require('bcrypt');
 
 const router = express.Router();
 

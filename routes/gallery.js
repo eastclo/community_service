@@ -102,10 +102,9 @@ router.post('/update', isLoggedIn, upload3.none(), async (req, res, next) => {
 
 router.post('/modify', async (req, res, next) => {
     try{
-        const post = await Gallery.find({"_id":req.body.id});
-        console.log(post[0]);
+        const post = await Gallery.findOne({"_id":req.body.id});
         res.render('gallery_modify', {
-            twit: post[0]
+            twit: post
         });
     } catch (err) {
         console.error(err);

@@ -22,10 +22,6 @@ const boardSchema = new Schema({
         type: Date,
         require: true,
     },
-    hashtag: {
-        type: String,
-        required: false,
-    }
 });
 
 module.exports = mongoose.model('Board', boardSchema);
