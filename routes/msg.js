@@ -11,7 +11,7 @@ router.get('/:id', async (req, res, next) => {
         const msgs = await Msg.find({ 'receiver_id': mongoose.Types.ObjectId(req.params.id)}).sort({createdAt:-1});
         for(let i = 0; i < msgs.length; i++) {
             const sender = await User.findOne({'_id': mongoose.Types.ObjectId(msgs[i].sender_id)});
-            msgs[i].sender_nick = sender.nick;
+            msgs[i].sender_nick = sender.nick; //닉네임 이메일 속성추가
             msgs[i].sender_email = sender.email;
         }
         res.render('msg', {

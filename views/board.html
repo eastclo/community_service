@@ -13,8 +13,16 @@
           </form>
         </div>
       <div class="twits">
-        <form id="hashtag-form" action="/hashtag">
+        <form id="hashtag-form" action="/board" method="get">
           <input type="text" name="hashtag" placeholder="태그 검색">
+          <button class="btn">검색</button>
+        </form>
+        <form id="hashtag-form" action="/board">
+          <input type="text" name="content" placeholder="게시글 내용 검색">
+          <button class="btn">검색</button>
+        </form>
+        <form id="hashtag-form" action="/board">
+          <input type="text" name="nick" placeholder="작성자 닉네임 검색">
           <button class="btn">검색</button>
         </form>
       {% endif %}
@@ -28,10 +36,10 @@
             <div class="twit-author">{{twit.poster_nick}}</div>
             <div class="twit-date">{{twit.date}}</div>
             {%if user.id == twit.poster_id %}
-              <form action="/board/modify" method="post">
+              <form action="/board/modify" method="post" style="display:inline-block;">
                 <button type="submit" name="id" value="{{twit.id}}" class="btn">수정</button>
               </form>
-              <form action="/board/delete" method="post">
+              <form action="/board/delete" method="post" style="display:inline-block;">
                 <button type="submit" name="id" value="{{twit.id}}" class="btn">삭제</button>
               </form>
             {% endif %}

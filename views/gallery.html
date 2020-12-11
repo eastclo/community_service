@@ -6,7 +6,7 @@
         <div>
           <form id="twit-form" action="/gallery" method="post" enctype="multipart/form-data">
             <div class="input-group">
-              <textarea id="twit" name="hashtag" maxlength="40" placeholder="해쉬태그"></textarea>
+              <textarea id="twit" name="hashtags" maxlength="40" placeholder="해쉬태그"></textarea>
             </div>
             <div class="img-preview">
               <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기">
@@ -20,7 +20,7 @@
           </form>
         </div>
       <div class="twits">
-        <form id="hashtag-form" action="/hashtag">
+        <form id="hashtag-form" action="/gallery" method="get">
           <input type="text" name="hashtag" placeholder="태그 검색">
           <button class="btn">검색</button>
         </form>
@@ -31,11 +31,12 @@
             <input type="hidden" value="{{twit.id}}" class="twit-id">
             <div class="twit-author">{{twit.poster_nick}}</div>
             <div class="twit-date">{{twit.date}}</div>
+            <div class="twit-hashtag">해쉬태그: {{twit.content}}</div>
             {%if user.id == twit.poster_id %}
-              <form action="/gallery/modify" method="post">
+              <form action="/gallery/modify" method="post" style="display:inline-block;">
                 <button type="submit" name="id" value="{{twit.id}}" class="btn">수정</button>
               </form>
-              <form action="/gallery/delete" method="post">
+              <form action="/gallery/delete" method="post" style="display:inline-block;">
                 <button type="submit" name="id" value="{{twit.id}}" class="btn">삭제</button>
               </form>
             {% endif %}

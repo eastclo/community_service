@@ -37,14 +37,45 @@ router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
 const upload2 = multer();
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     try {
-    //    const hashtags = req.body.content.match(/#[^\s#]+/g);
+        const hashtags = req.body.hashtags.match(/#[^\s#]+/g);
+        if(hashtags) {
+            for(let i = 0; i < hashtags.length; i++)
+                hashtags[i] = hashtags[i].slice(1).toLowerCase(); //#제거 후 소문자로 저장
+        }
         const poster = await User.find({"_id": req.user.id});
         await Gallery.create({
             poster_id: req.user.id,
             poster_nick: poster[0].nick,
             date: Date.now(),
             img: req.body.url,
+            content: req.body.hashtags,
+            hashtags: hashtags,
         });
+        res.redirect('/gallery');
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
+
+const upload3 = multer();
+router.post('/update', isLoggedIn, upload3.none(), async (req, res, next) => {
+    try {
+        const hashtags = req.body.content.match(/#[^\s#]+/g);
+        if(hashtags) {
+            for(let i = 0; i < hashtags.length; i++)
+                hashtags[i] = hashtags[i].slice(1).toLowerCase(); //#제거 후 소문자로 저장
+        }
+        if(req.body.url) { //이미지 수정이 있을 경우
+            await Gallery.updateOne({"_id": req.body.id},{$set:{
+                img: req.body.url,
+            }});
+        }
+        await Gallery.updateOne({"_id": req.body.id},{$set:{
+            date: Date.now(),
+            content: req.body.content,
+            hashtags: hashtags,
+        }});
         res.redirect('/gallery');
     } catch (error) {
         console.error(error);
@@ -54,7 +85,14 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
 
 router.get('/', async (req, res, next) => {
     try {
-        const posts = await Gallery.find({}).sort({date: -1});
+        let search = req.query.hashtag;
+        let posts;
+        if(search) {//해쉬태그 검색일시
+            search = search.toLowerCase();
+            posts = await Gallery.find({ 'hashtags' : { $in: [search]}}).sort({date: -1});
+        }
+        else 
+            posts = await Gallery.find({}).sort({date: -1});
         res.render('gallery', {
             title: 'Community Service',
             twits: posts,
@@ -81,22 +119,6 @@ router.get('/modify', (req, res, next) => {
     } catch (err) {
         console.error(err);
         next(err);
-    }
-});
-
-const upload3 = multer();
-router.post('/update', isLoggedIn, upload3.none(), async (req, res, next) => {
-    try {
-    //    const hashtags = req.body.content.match(/#[^\s#]+/g);
-        await Gallery.updateOne({"_id": req.body.id},{$set:{
-            date: Date.now(),
-            img: req.body.url,
-       //     hashtag: req.body.hashtag,
-        }});
-        res.redirect('/gallery');
-    } catch (error) {
-        console.error(error);
-        next(error);
     }
 });
 

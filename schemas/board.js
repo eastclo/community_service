@@ -20,8 +20,12 @@ const boardSchema = new Schema({
     },
     date:{
         type: Date,
-        require: true,
+        required: true,
     },
+    hashtags: [{
+        type: String,
+        required: false,
+    }]
 });
 
 module.exports = mongoose.model('Board', boardSchema);

@@ -18,6 +18,14 @@ const gallerySchema = new Schema({
         type: Date,
         require: true,
     },
+    content: {
+        type: String,
+        require: false,
+    },
+    hashtags: [{
+        type: String,
+        require: false,
+    }]
 });
 
 module.exports = mongoose.model('Gallery', gallerySchema);
